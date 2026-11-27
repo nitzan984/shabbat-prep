@@ -22,7 +22,7 @@ export function MenuStar({ recipe, withText = false }: { recipe: Recipe; withTex
       className={`star-btn${recipe.inMenu ? ' star-btn--on' : ''}${withText ? ' star-btn--text' : ''}`}
       aria-pressed={recipe.inMenu}
       aria-label={withText ? undefined : `בתפריט השבת: ${recipe.name}`}
-      onClick={() => recipeActions.toggleMenu(recipe.id)}
+      onClick={() => void recipeActions.toggleMenu(recipe)}
     >
       <Icon name="star" size={24} />
       {withText && (recipe.inMenu ? 'בתפריט השבת' : 'הוספה לתפריט השבת')}

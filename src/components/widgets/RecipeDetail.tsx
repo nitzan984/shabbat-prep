@@ -1,7 +1,7 @@
-import { taskActions, tasksStore } from '../../hooks/useCheckList'
 import { layoutActions } from '../../hooks/useLayout'
 import { showToast } from '../../hooks/useNotices'
 import { categoryLabel, recipeActions, type Recipe } from '../../hooks/useRecipes'
+import { taskActions } from '../../hooks/useTasks'
 import { timerActions } from '../../hooks/useTimer'
 import { formatMinutes } from '../../lib/time'
 import { Icon } from '../ui/Icon'
@@ -34,18 +34,17 @@ export function RecipeDetail({
 
   const addToTasks = () => {
     const text = `להכין ${recipe.name}`
-    const exists = tasksStore.get().some((t) => t.text === text && !t.done)
-    if (exists) {
+    if (taskActions.hasOpenShabbatTask(text)) {
       showToast('המטלה כבר נמצאת ברשימה')
       return
     }
-    taskActions.add(text)
+    taskActions.add('shabbat', text, null)
     showToast(`נוסף למטלות: ${text}`)
   }
 
   const remove = () => {
     if (!window.confirm(`למחוק את המתכון "${recipe.name}"?`)) return
-    recipeActions.remove(recipe.id)
+    void recipeActions.remove(recipe.id)
     showToast('המתכון נמחק')
     onDeleted()
   }

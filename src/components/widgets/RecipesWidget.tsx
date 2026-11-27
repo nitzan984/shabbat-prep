@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useRecipes, type Recipe } from '../../hooks/useRecipes'
+import { SharedBoundary } from '../FamilyGate'
 import { RecipeDetail } from './RecipeDetail'
 import { RecipeForm } from './RecipeForm'
 import { RecipeList } from './RecipeList'
@@ -8,7 +9,15 @@ type View = { kind: 'list' } | { kind: 'detail'; id: string } | { kind: 'form'; 
 
 /** מצב התצוגה (רשימה / כרטיס / טופס) הוא state מקומי. המתכונים עצמם ב־store. */
 export function RecipesWidget() {
-  const recipes = useRecipes()
+  const query = useRecipes()
+  return (
+    <SharedBoundary query={query} errorText="לא הצלחנו לטעון את המתכונים.">
+      {(recipes) => <RecipesScreen recipes={recipes} />}
+    </SharedBoundary>
+  )
+}
+
+function RecipesScreen({ recipes }: { recipes: Recipe[] }) {
   const [view, setView] = useState<View>({ kind: 'list' })
 
   // מתכון שנמחק (למשל בטאב אחר) מחזיר לרשימה

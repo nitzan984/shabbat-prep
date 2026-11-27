@@ -1,11 +1,12 @@
-import { countDone, useChecklist, useTasks } from '../../hooks/useCheckList'
+import { countDone, useChecklist } from '../../hooks/useChecklist'
 import { useRecipes } from '../../hooks/useRecipes'
+import { shabbatTasks, useTasks } from '../../hooks/useTasks'
 import { Icon } from '../ui/Icon'
 
 export function SummaryChips() {
-  const tasks = useTasks()
-  const checklist = useChecklist()
-  const recipes = useRecipes()
+  const tasks = shabbatTasks(useTasks().tasks)
+  const checklist = useChecklist().items
+  const recipes = useRecipes().recipes
 
   const tasksDone = countDone(tasks)
   const checklistDone = countDone(checklist)

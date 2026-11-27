@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react'
 import { jumpToSection, useActiveSection, type NavTarget } from '../hooks/useActiveSection'
-import { useChecklist, useTasks } from '../hooks/useCheckList'
+import { useChecklist } from '../hooks/useChecklist'
+import { shabbatTasks, useTasks } from '../hooks/useTasks'
 import { layoutActions, type WidgetId } from '../hooks/useLayout'
 import { useNow } from '../hooks/useNow'
 import { remainingMs, useTimer } from '../hooks/useTimer'
@@ -39,8 +40,8 @@ function useTimerBadge(): { text: string | null; spoken: string | null } {
 /** ניווט ראשי: בטלפון פס תחתון, באייפד ובמחשב פס עליון (CSS מחליט). */
 export function AppNav() {
   const active = useActiveSection()
-  const tasksLeft = useTasks().filter((t) => !t.done).length
-  const checklistLeft = useChecklist().filter((t) => !t.done).length
+  const tasksLeft = shabbatTasks(useTasks().tasks).filter((t) => !t.done).length
+  const checklistLeft = useChecklist().items.filter((t) => !t.done).length
   const timerBadge = useTimerBadge()
 
   const go = (event: MouseEvent<HTMLAnchorElement>, item: NavItem) => {

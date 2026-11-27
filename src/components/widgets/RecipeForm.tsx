@@ -45,7 +45,7 @@ export function RecipeForm({
       inMenu: form.get('inMenu') === 'on',
     }
     if (recipe) {
-      recipeActions.update(recipe.id, draft)
+      void recipeActions.update(recipe.id, draft)
       showToast('המתכון עודכן')
       onSaved(recipe.id)
     } else {

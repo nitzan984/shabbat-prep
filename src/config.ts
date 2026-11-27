@@ -8,3 +8,9 @@ export const LOCATION = {
 
 /** קידומת לכל מפתחות ה־localStorage של האפליקציה. */
 export const STORAGE_PREFIX = 'shabbat-prep:v1:'
+
+/** Supabase: הכתובת והמפתח הציבורי מגיעים ממשתני סביבה של Vite. */
+export const SUPABASE = {
+  url: import.meta.env.VITE_SUPABASE_URL ?? '',
+  key: import.meta.env.VITE_SUPABASE_KEY ?? '',
+} as const
