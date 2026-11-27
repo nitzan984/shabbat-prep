@@ -1,12 +1,13 @@
 # Family sharing: assignees, weekday tasks, classes and events
 
-Branch: `feature/family-tasks` · Status: **awaiting approval** (nothing built yet)
+Branch: `feature/family-tasks` · Status: **approved 2026-11-27, in progress**
 
 ## Request (user's words, translated)
 1. Assign a task to שיר, מיכל or איתן.
 2. Manage tasks for regular weekdays, in a view separate from the Shabbat view.
 3. Everyone who uses the app sees everything (shared across devices).
 4. Add classes (חוגים) and events up to a month ahead, for one person or the whole family.
+5. (added mid-build) Fix the layout and navigation on the phone, which is ~80% of use; on Android it should feel like a real app.
 
 ## Current state (researched)
 - All user data lives in `localStorage` stores (`src/hooks/useCheckList.ts`, `useRecipes.ts`, `useLayout.ts`, `useTimer.ts`); nothing is shared between devices.
@@ -53,7 +54,12 @@ Verified when: checklist reset and recipe edit in one tab show in the other; loc
 - `src/services/checklist.ts`, `src/services/recipes.ts`, `useCheckList.ts`, `useRecipes.ts`.
 - Blocked by: 2.
 
-### Phase 4: Week view with weekday tasks (M)
+### Phase 4: Phone app shell (M) — added mid-build
+Verified when: at 375px each bottom tab opens its own screen (שבת · משימות · השבוע · מתכונים · טיימר), compact sticky top bar, no horizontal scroll; iPad/desktop keep the widget board with a top switch `הכנות לשבת | השבוע`.
+- `src/hooks/useRoute.ts`, `src/hooks/useMedia.ts`, `src/components/shell/*`, `AppNav.tsx`, `App.tsx`, `styles.css`; remove scroll-spy `useActiveSection.ts`.
+- Blocked by: 3.
+
+### Phase 4b: Week view with weekday tasks (M)
 Verified when: switching views works by click, by hash and by day-of-week default; tasks per day add/tick/assign/filter; nav items follow the view on phone and desktop.
 - `src/hooks/useView.ts`, `src/lib/week.ts` (week ranges), `src/components/week/*`, `AppNav.tsx`, `SiteHeader.tsx`, `App.tsx`, `styles.css`.
 - Blocked by: 2.
@@ -61,6 +67,11 @@ Verified when: switching views works by click, by hash and by day-of-week defaul
 ### Phase 5: Classes and events (M)
 Verified when: unit tests for occurrence expansion (weekly, until date, skipped dates, month range); a class for שיר every Tuesday 16:00 shows on each Tuesday in the week view and in "חודש קדימה"; cancelling one date hides only that date.
 - `src/services/events.ts`, `src/lib/occurrences.ts` (+ test), `src/hooks/useEvents.ts`, `src/components/week/EventForm.tsx`, `DayCard.tsx`, `MonthAgenda.tsx`.
+- Blocked by: 4.
+
+### Phase 6b: Installable Android app (S) — added mid-build
+Verified when: Chrome reports the manifest installable; an install button appears on Android; app opens standalone and loads offline (app shell).
+- `public/manifest.webmanifest`, `public/icons/*`, `public/sw.js`, `src/lib/pwa.ts`, install entry in the menu.
 - Blocked by: 4.
 
 ### Phase 6: Deploy (S)
@@ -78,20 +89,27 @@ Verified when: preview URL works on phone and iPad sizes with the family code; a
 | Weekday tasks | One-off, per date | Simple; recurrence is for classes |
 | Classes | Weekly repeat, optional end date, skip single dates | Covers חוגים and holidays |
 | Existing local data | Not migrated; start from defaults | App is a few hours old |
+| Phone layout | Bottom tabs switch screens (hash routes), not anchors in one long page | 80% phone use; app-like; short screens |
+| Large screens | Keep widget board (drag/hide) + top switch | Original requirement; space is available |
+| Android app | PWA (manifest, icons, service worker, install button), no Play Store | Installable today, no store account or native build |
+| Week screen layout | Day picker strip + one day's agenda, month list below | Fits a phone; same on all sizes |
+| `family_name()` advisor warning | Kept: security definer callable by anon | Returns only the name, and only for a valid code |
 
 ## Not yet specified
 - Answers to the open questions in the approval message.
 
 ## Always / Never
 - Always: Hebrew RTL, real buttons and labels, 44px targets, SVG icons, no `useEffect` without need, services/hooks/components layering, server state vs local state kept apart.
-- Never (this plan): per-person accounts, push notifications, recurring tasks, shared timer, offline edit queue, touching the two existing Supabase projects.
+- Never (this plan): per-person accounts, push notifications, recurring tasks, shared timer, offline edit queue, touching the two existing Supabase projects, Play Store / native build.
 
 ## Progress
 | Phase | Status |
 | --- | --- |
-| 1 Backend and access | waiting for approval |
+| 1 Backend and access | done: project `jooyitcfpwuazgwzrrnn` (eu-central-1), RLS proven with curl (right code 10 rows; no/wrong code empty; writes without code 401; cross-household update 401) |
 | 2 Shared Shabbat tasks | — |
 | 3 Shared checklist and recipes | — |
-| 4 Week view | — |
+| 4 Phone app shell | — |
+| 4b Week view | — |
 | 5 Classes and events | — |
+| 6b Android app (PWA) | — |
 | 6 Deploy | — |
