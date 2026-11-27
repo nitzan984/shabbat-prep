@@ -1,0 +1,1815 @@
+/* ================= טוקנים ================= */
+:root {
+  --bg: #f4f0ff;
+  --ink: #1e1b4b;
+  --ink-2: #3f3a6b;
+  --muted: #565280;
+  --yellow: #ffc93c;
+  --line: rgba(30, 27, 75, 0.12);
+  --radius-xl: 28px;
+  --radius-lg: 24px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --shadow: 0 12px 32px -16px rgba(30, 27, 75, 0.35);
+  --sticky-offset: 96px;
+
+  --timer: #c2410c;
+  --timer-tint: #fff3ea;
+  --timer-tint-2: #ffe1cc;
+  --timer-ink: #7c2d12;
+  --tasks: #1d4ed8;
+  --tasks-tint: #eef3ff;
+  --tasks-tint-2: #d9e4ff;
+  --tasks-ink: #1e3a8a;
+  --checklist: #047857;
+  --checklist-tint: #e9f9f1;
+  --checklist-tint-2: #c9eedb;
+  --checklist-ink: #064e3b;
+  --recipes: #be185d;
+  --recipes-tint: #fff0f6;
+  --recipes-tint-2: #fbd3e5;
+  --recipes-ink: #831843;
+
+  color-scheme: light;
+}
+
+/* ================= בסיס ================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--sticky-offset);
+}
+
+body {
+  margin: 0;
+  font-family: 'Rubik', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul,
+ol {
+  margin: 0;
+}
+
+svg {
+  flex: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+[tabindex='-1']:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.sr-only {
+  position: absolute !important;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  inline-size: 100%;
+  max-inline-size: 1240px;
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: -80px;
+  z-index: 200;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ערכות צבע לווידג'טים ולצ'יפים שלהם */
+.widget--timer,
+.toggle--timer,
+.nav-tone--timer {
+  --c: var(--timer);
+  --tint: var(--timer-tint);
+  --tint2: var(--timer-tint-2);
+  --c-ink: var(--timer-ink);
+}
+.widget--tasks,
+.toggle--tasks,
+.nav-tone--tasks {
+  --c: var(--tasks);
+  --tint: var(--tasks-tint);
+  --tint2: var(--tasks-tint-2);
+  --c-ink: var(--tasks-ink);
+}
+.widget--checklist,
+.toggle--checklist,
+.nav-tone--checklist {
+  --c: var(--checklist);
+  --tint: var(--checklist-tint);
+  --tint2: var(--checklist-tint-2);
+  --c-ink: var(--checklist-ink);
+}
+.widget--recipes,
+.toggle--recipes,
+.nav-tone--recipes {
+  --c: var(--recipes);
+  --tint: var(--recipes-tint);
+  --tint2: var(--recipes-tint-2);
+  --c-ink: var(--recipes-ink);
+}
+
+.nav-tone--info {
+  --c: #6d28d9;
+  --tint: #efe7ff;
+  --tint2: #e0d3ff;
+  --c-ink: #4c1d95;
+}
+
+/* ================= כפתורים ושדות ================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-block-size: 44px;
+  padding: 0 18px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease,
+    background-color 0.12s ease;
+}
+
+.btn:not(:disabled):hover {
+  filter: brightness(1.06);
+}
+
+.btn:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--c, var(--ink));
+  color: #fff;
+}
+
+.btn--soft {
+  background: var(--tint2, #e6e0ff);
+  color: var(--c-ink, var(--ink));
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--c-ink, var(--ink));
+  border-color: var(--tint2, #d6ceff);
+}
+
+.btn--accent {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.btn--danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn--small {
+  padding: 0 12px;
+  font-size: 0.92rem;
+}
+
+.btn--xl {
+  flex: 1;
+  min-block-size: 72px;
+  padding: 0 24px;
+  border-radius: 22px;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.btn--start {
+  background: var(--c, var(--checklist));
+  color: #fff;
+}
+
+.btn--pause {
+  background: var(--ink);
+  color: #fff;
+}
+
+.btn--reset {
+  background: var(--tint2);
+  color: var(--c-ink);
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--c-ink, var(--ink));
+}
+
+.icon-btn:not(:disabled):hover {
+  background: var(--tint2, #ebe5ff);
+}
+
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon-btn--on-color {
+  color: #fff;
+}
+
+.icon-btn--on-color:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.icon-btn--danger {
+  color: #b91c1c;
+}
+
+.icon-btn--danger:not(:disabled):hover {
+  background: #fee2e2;
+}
+
+.chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--tint2, #d6ceff);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-ink, var(--ink));
+  font-weight: 600;
+}
+
+.chip-btn:hover {
+  border-color: var(--c, var(--ink));
+}
+
+.chip-btn[aria-pressed='true'] {
+  background: var(--c, var(--ink));
+  border-color: var(--c, var(--ink));
+  color: #fff;
+}
+
+.chip-btn__count {
+  min-inline-size: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--tint);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.chip-btn[aria-pressed='true'] .chip-btn__count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.input {
+  inline-size: 100%;
+  min-block-size: 48px;
+  padding: 0 14px;
+  border: 2px solid var(--tint2, #d6ceff);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.input::placeholder {
+  color: #77739b;
+}
+
+.input:focus {
+  border-color: var(--c, var(--ink));
+  outline: 3px solid color-mix(in srgb, var(--c, var(--ink)) 30%, transparent);
+  outline-offset: 0;
+}
+
+textarea.input {
+  padding: 12px 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+select.input {
+  padding-inline-end: 8px;
+}
+
+.inline-form {
+  inline-size: 100%;
+}
+
+.inline-form__label {
+  display: block;
+  margin-block-end: 6px;
+  color: var(--c-ink, var(--ink));
+  font-weight: 600;
+}
+
+.inline-form__row {
+  display: flex;
+  gap: 8px;
+}
+
+.inline-form__row .input {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ================= כותרת ================= */
+.site-header {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 201, 60, 0.22), transparent 40%),
+    radial-gradient(circle at 90% 120%, rgba(190, 24, 93, 0.35), transparent 45%),
+    var(--ink);
+  color: #fff;
+  padding-block: 22px 20px;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.site-header__logo {
+  display: grid;
+  place-items: center;
+  inline-size: 60px;
+  block-size: 60px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--yellow);
+}
+
+.site-header__title {
+  font-size: clamp(1.9rem, 6vw, 2.7rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.site-header__subtitle {
+  margin-block-start: 4px;
+  color: #e4e0ff;
+  font-size: clamp(1rem, 3.4vw, 1.2rem);
+  font-weight: 500;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 8px 20px -12px rgba(30, 27, 75, 0.5);
+}
+
+.countdown {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.countdown__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding-block: 10px;
+}
+
+.countdown__icon {
+  color: var(--ink);
+}
+
+.countdown__text {
+  flex: 1 1 auto;
+}
+
+.countdown__main {
+  font-size: clamp(1.15rem, 4.2vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown__main--loading {
+  opacity: 0.75;
+}
+
+.countdown__hint {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.countdown__times {
+  display: flex;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+
+.countdown__times div {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(30, 27, 75, 0.1);
+}
+
+.countdown__times dt {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.countdown__times dd {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ================= אזור ראשי ================= */
+.main {
+  display: grid;
+  gap: 20px;
+  padding-block: 20px 32px;
+}
+
+.info-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.info-card {
+  --accent: #6d28d9;
+  --card-tint: #efe7ff;
+  --card-ink: #4c1d95;
+  position: relative;
+  overflow: hidden;
+  padding: 24px 18px 18px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--card-tint) 0, #fff 110px);
+  box-shadow: var(--shadow);
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  block-size: 7px;
+  background: var(--accent);
+}
+
+.info-card--parasha {
+  --accent: #0e7490;
+  --card-tint: #dcf3f8;
+  --card-ink: #155e75;
+}
+
+.info-card--zmanim {
+  --accent: #b45309;
+  --card-tint: #fff0d4;
+  --card-ink: #78350f;
+}
+
+.info-card--weather {
+  --accent: #0369a1;
+  --card-tint: #def0fb;
+  --card-ink: #0c4a6e;
+}
+
+.info-card__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-block-end: 12px;
+  color: var(--card-ink);
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+
+.info-card__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.facts {
+  display: grid;
+}
+
+.facts__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-block: 8px;
+  border-block-end: 1px dashed var(--line);
+}
+
+.facts__row:last-child {
+  border-block-end: 0;
+}
+
+.facts__row--stack {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.facts dt {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.facts dd {
+  font-weight: 600;
+  text-align: end;
+}
+
+.facts__row--stack dd {
+  text-align: start;
+}
+
+.facts__big {
+  font-size: 1.25rem;
+  font-weight: 700 !important;
+}
+
+.parasha__name {
+  margin-block-end: 6px;
+  color: var(--card-ink);
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-block-end: 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--card-tint, var(--tint2));
+  color: var(--card-ink, var(--c-ink));
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.reading {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.reading__ref {
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.zmanim {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.zmanim th,
+.zmanim td {
+  padding: 6px 4px;
+}
+
+.zmanim thead th {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.zmanim tbody th {
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-align: start;
+}
+
+.zmanim td {
+  font-weight: 700;
+  text-align: center;
+}
+
+.zmanim tbody tr {
+  border-block-end: 1px dashed var(--line);
+}
+
+.zmanim__highlight {
+  background: var(--card-tint);
+}
+
+.zmanim__highlight th {
+  font-weight: 700 !important;
+  color: var(--card-ink);
+}
+
+.weather {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.weather-day {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 2px;
+  padding: 12px 6px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid var(--card-tint);
+  text-align: center;
+}
+
+.weather-day__title {
+  color: var(--card-ink);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.weather-day__desc {
+  font-weight: 600;
+}
+
+.weather-day__temps {
+  display: flex;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.weather-day__min {
+  color: var(--muted);
+}
+
+.weather-day__rain {
+  color: #1e40af;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.weather-day__now {
+  margin-block-start: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--card-tint);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.skeleton__line {
+  display: block;
+  block-size: 16px;
+  margin-block: 12px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ece7ff 25%, #f8f6ff 50%, #ece7ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.inline-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-block-start: 12px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #fff4e5;
+  color: #7c2d12;
+  font-size: 0.88rem;
+}
+
+.card-error {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.card-error p {
+  color: #7f1d1d;
+  font-weight: 600;
+}
+
+/* ================= ניווט ראשי ================= */
+/* ברירת מחדל (אייפד ומחשב): פס עליון מתחת לפס הצהוב */
+.app-nav {
+  background: rgba(255, 255, 255, 0.96);
+  border-block-end: 1px solid var(--line);
+  backdrop-filter: saturate(1.4) blur(8px);
+}
+
+.app-nav__list {
+  display: flex;
+  gap: 6px;
+  padding-block: 6px;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.app-nav__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-block-size: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: var(--c-ink);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.app-nav__item:hover {
+  background: var(--tint);
+}
+
+.app-nav__item[aria-current='location'] {
+  background: var(--c);
+  color: #fff;
+}
+
+.app-nav__icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+
+.app-nav__badge {
+  position: absolute;
+  top: -7px;
+  inset-inline-end: -10px;
+  min-inline-size: 19px;
+  block-size: 19px;
+  padding: 0 5px;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  background: var(--c);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 15px;
+  text-align: center;
+}
+
+.app-nav__item[aria-current='location'] .app-nav__badge {
+  background: #fff;
+  border-color: var(--c);
+  color: var(--c-ink);
+}
+
+.app-nav__label--clock {
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.shabbat-info {
+  display: grid;
+  gap: 20px;
+}
+
+/* ================= סיכום ================= */
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.summary__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 40px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip--tasks {
+  background: var(--tasks-tint-2);
+  color: var(--tasks-ink);
+}
+
+.chip--checklist {
+  background: var(--checklist-tint-2);
+  color: var(--checklist-ink);
+}
+
+.chip--recipes {
+  background: var(--recipes-tint-2);
+  color: var(--recipes-ink);
+}
+
+.progress {
+  flex: 1 1 240px;
+}
+
+.progress__label {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 6px;
+  font-weight: 600;
+}
+
+.progress__track {
+  block-size: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9e3ff;
+}
+
+.progress__fill {
+  block-size: 100%;
+  border-radius: 999px;
+  background: linear-gradient(270deg, var(--timer), var(--recipes), var(--tasks), var(--checklist));
+  transition: inline-size 0.4s ease;
+}
+
+/* ================= שורת ווידג'טים ================= */
+.widgets-area {
+  display: grid;
+  gap: 16px;
+}
+
+.toggles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggles__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.toggles__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-block-size: 44px;
+  padding: 0 14px;
+  border: 2px solid var(--c);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.toggle[aria-pressed='true'] {
+  background: var(--c);
+  color: #fff;
+}
+
+.toggle__state {
+  opacity: 0.85;
+}
+
+.empty-all {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 40px 20px;
+  border: 3px dashed #c8bdff;
+  border-radius: var(--radius-xl);
+  background: #fff;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.empty-all__title {
+  color: var(--ink);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+/* ================= ווידג'טים ================= */
+.widget-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.widget {
+  border-radius: var(--radius-xl);
+  background: var(--tint);
+  box-shadow: var(--shadow);
+  transition:
+    opacity 0.15s ease,
+    outline-color 0.15s ease;
+}
+
+.widget--dragging {
+  opacity: 0.45;
+}
+
+.widget--drop-target {
+  outline: 4px dashed var(--c);
+  outline-offset: 4px;
+}
+
+.widget__head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 10px 10px 8px;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--c);
+  color: #fff;
+}
+
+.widget__head :focus-visible {
+  outline-color: #fff;
+}
+
+.drag-handle {
+  display: grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 44px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-handle:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.widget__title {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-inline-size: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.widget__actions {
+  display: flex;
+}
+
+.widget__body {
+  padding: 18px;
+}
+
+.widget-intro {
+  margin-block-end: 12px;
+  color: var(--c-ink);
+  font-size: 0.95rem;
+}
+
+.widget-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block-start: 14px;
+  padding-block-start: 12px;
+  border-block-start: 2px dashed var(--tint2);
+}
+
+.widget-footer__count {
+  color: var(--c-ink);
+  font-weight: 700;
+}
+
+.empty {
+  margin-block-start: 12px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ---------- טיימר ---------- */
+.timer {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+}
+
+.timer__ring {
+  position: relative;
+  inline-size: min(270px, 74vw);
+  aspect-ratio: 1;
+}
+
+.timer__ring svg {
+  inline-size: 100%;
+  block-size: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer__track {
+  fill: #fff;
+  stroke: var(--tint2);
+  stroke-width: 18;
+}
+
+.timer__progress {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 18;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s linear;
+}
+
+.timer__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  padding: 40px;
+  text-align: center;
+}
+
+.timer__label {
+  max-inline-size: 170px;
+  overflow: hidden;
+  color: var(--c-ink);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timer__time {
+  color: var(--c-ink);
+  direction: ltr;
+  font-size: clamp(2.7rem, 12vw, 3.7rem);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer__status {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.timer__main {
+  display: flex;
+  gap: 12px;
+  inline-size: 100%;
+}
+
+.timer__adjust {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  inline-size: 100%;
+}
+
+.timer__adjust .btn {
+  padding: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.timer__presets {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ---------- רשימות (מטלות / רשימה קבועה) ---------- */
+.items {
+  display: grid;
+  gap: 8px;
+  margin-block-start: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.item__check {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  min-block-size: 48px;
+  min-inline-size: 0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.item__check:hover {
+  background: var(--tint);
+}
+
+.item__input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+}
+
+.checkbox {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 30px;
+  block-size: 30px;
+  border: 2.5px solid var(--c);
+  border-radius: 9px;
+  background: #fff;
+  color: transparent;
+  transition: background-color 0.12s ease;
+}
+
+.item__input:checked + .checkbox {
+  background: var(--c);
+  color: #fff;
+}
+
+.item__input:focus-visible + .checkbox {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.item__text {
+  min-inline-size: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.item--done .item__text {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- מתכונים ---------- */
+.recipes__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.search {
+  position: relative;
+  flex: 1 1 200px;
+}
+
+.search__icon {
+  position: absolute;
+  inset-inline-start: 13px;
+  top: 50%;
+  color: var(--c);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.search__input {
+  padding-inline-start: 42px;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 12px;
+}
+
+.recipe-rows {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.recipe-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.recipe-row__open {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-block-size: 56px;
+  min-inline-size: 0;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  text-align: start;
+}
+
+.recipe-row__open:hover {
+  background: var(--tint);
+}
+
+.recipe-row__name {
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.recipe-row__meta {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.star-btn {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 48px;
+  block-size: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  color: var(--c);
+}
+
+.star-btn:hover {
+  background: var(--tint);
+}
+
+.star-btn--on svg {
+  fill: currentColor;
+}
+
+.star-btn--text {
+  display: inline-flex;
+  gap: 6px;
+  inline-size: auto;
+  block-size: auto;
+  min-block-size: 44px;
+  padding: 0 14px;
+  background: #fff;
+  border: 2px solid var(--tint2);
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.star-btn--text svg {
+  color: var(--c);
+}
+
+.recipe-card,
+.recipe-form {
+  display: grid;
+  gap: 14px;
+}
+
+.recipe-card > .btn {
+  justify-self: start;
+}
+
+.recipe-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.recipe-card__title {
+  color: var(--c-ink);
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.recipe-card .tag {
+  background: var(--tint2);
+  color: var(--c-ink);
+}
+
+.recipe-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.recipe-card__meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.recipe-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.recipe-card__section h4 {
+  margin-block-end: 8px;
+  color: var(--c-ink);
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.ingredients,
+.steps {
+  display: grid;
+  gap: 4px;
+  padding-block: 12px;
+  padding-inline: 34px 16px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.steps li::marker {
+  color: var(--c);
+  font-weight: 800;
+}
+
+.ingredients li::marker {
+  color: var(--c);
+}
+
+.recipe-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-block-start: 12px;
+  border-block-start: 2px dashed var(--tint2);
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field label {
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.field__hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.switch-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-block-size: 44px;
+  color: var(--c-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ================= הודעות ================= */
+.toasts {
+  position: fixed;
+  inset-inline: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 50;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-inline-size: 520px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 16px 32px -12px rgba(30, 27, 75, 0.6);
+  font-weight: 600;
+  animation: pop-in 0.2s ease-out;
+}
+
+.toast svg {
+  color: var(--yellow);
+}
+
+.alarm {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(30, 27, 75, 0.75);
+  animation: fade-in 0.2s ease-out;
+}
+
+.alarm__card {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  inline-size: 100%;
+  max-inline-size: 420px;
+  padding: 28px 22px 22px;
+  border: 6px solid var(--yellow);
+  border-radius: var(--radius-xl);
+  background: #fff;
+  text-align: center;
+  --c: var(--timer);
+}
+
+.alarm__bell {
+  display: grid;
+  place-items: center;
+  inline-size: 104px;
+  block-size: 104px;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: var(--ink);
+  animation: ring 1s ease-in-out infinite;
+}
+
+.alarm__title {
+  color: var(--timer);
+  font-size: 2.3rem;
+  font-weight: 800;
+}
+
+.alarm__desc {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.alarm__card .btn {
+  inline-size: 100%;
+}
+
+.site-footer {
+  padding-block: 0 32px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ================= רספונסיביות ================= */
+/* טלפון: הניווט הופך לפס תחתון קבוע, כמו באפליקציה */
+@media (max-width: 739.98px) {
+  :root {
+    --sticky-offset: 104px;
+    --bottom-nav: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  body {
+    padding-block-end: var(--bottom-nav);
+  }
+
+  .app-nav {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 30;
+    padding-block-end: env(safe-area-inset-bottom);
+    border-block-start: 1px solid var(--line);
+    border-block-end: 0;
+    box-shadow: 0 -10px 24px -16px rgba(30, 27, 75, 0.45);
+  }
+
+  .app-nav__list {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2px;
+    padding: 4px 6px;
+    overflow: visible;
+  }
+
+  .app-nav__item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    inline-size: 100%;
+    min-block-size: 56px;
+    padding: 4px 2px;
+    border-radius: 16px;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .app-nav__icon {
+    inline-size: 52px;
+    block-size: 30px;
+    border-radius: 999px;
+    color: var(--c-ink);
+    transition: background-color 0.15s ease;
+  }
+
+  .app-nav__item:hover {
+    background: transparent;
+  }
+
+  .app-nav__item[aria-current='location'] {
+    background: transparent;
+    color: var(--c-ink);
+    font-weight: 700;
+  }
+
+  .app-nav__item[aria-current='location'] .app-nav__icon {
+    background: var(--c);
+    color: #fff;
+  }
+
+  .app-nav__badge {
+    top: -4px;
+    inset-inline-end: 2px;
+  }
+
+  .app-nav__label {
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .toasts {
+    bottom: calc(var(--bottom-nav) + 12px);
+  }
+}
+
+@media (min-width: 740px) {
+  :root {
+    --sticky-offset: 124px;
+  }
+}
+
+@media (min-width: 600px) {
+  .info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 760px) {
+  .container {
+    padding-inline: 24px;
+  }
+
+  .widget-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .info-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .countdown__inner {
+    gap: 4px 10px;
+    padding-block: 8px;
+  }
+
+  .countdown__times div {
+    padding: 2px 10px;
+  }
+
+  .countdown__times dd {
+    font-size: 1.05rem;
+  }
+
+  .widget__title {
+    font-size: 1.05rem;
+  }
+
+  .widget__body {
+    padding: 14px;
+  }
+
+  .btn--xl {
+    padding: 0 12px;
+    font-size: 1.2rem;
+  }
+}
+
+/* בטלפון אין גרירת HTML5, אז משאירים רק את החצים */
+@media (hover: none) and (pointer: coarse) and (max-width: 700px) {
+  .drag-handle {
+    display: none;
+  }
+
+  .widget__head {
+    padding-inline-start: 14px;
+  }
+}
+
+/* ================= אנימציות ================= */
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ring {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20% {
+    transform: rotate(-14deg);
+  }
+  40% {
+    transform: rotate(12deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  80% {
+    transform: rotate(5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
