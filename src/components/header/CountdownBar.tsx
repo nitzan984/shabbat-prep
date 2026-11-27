@@ -6,13 +6,13 @@ import { Icon } from '../ui/Icon'
 import { RetryButton } from '../ui/InfoCard'
 
 /** הפס הצהוב: ספירה לאחור חיה, "שבת שלום!" או "שבוע טוב!". */
-export function CountdownBar({ week }: { week: ShabbatWeekView }) {
+export function CountdownBar({ week, compact = false }: { week: ShabbatWeekView; compact?: boolean }) {
   const now = useNow(1000)
   const { data, status, isFetching, refetch } = week.query
 
   if (!data) {
     return (
-      <div className="countdown" aria-busy={status === 'loading'}>
+      <div className={compact ? 'countdown countdown--compact' : 'countdown'} aria-busy={status === 'loading'}>
         <div className="countdown__inner container">
           <Icon name="candle" size={30} className="countdown__icon" />
           {status === 'error' ? (
@@ -37,24 +37,29 @@ export function CountdownBar({ week }: { week: ShabbatWeekView }) {
         : 'שבוע טוב!'
 
   return (
-    <div className={`countdown countdown--${phase}`}>
+    <div className={`countdown countdown--${phase}${compact ? ' countdown--compact' : ''}`}>
       <div className="countdown__inner container">
-        <Icon name={phase === 'shabbat' ? 'candle' : phase === 'after' ? 'moon' : 'clock'} size={30} className="countdown__icon" />
+        <Icon name={phase === 'shabbat' ? 'candle' : phase === 'after' ? 'moon' : 'clock'} size={compact ? 22 : 30} className="countdown__icon" />
         <div className="countdown__text">
           <p className="countdown__main">{main}</p>
-          {phase === 'after' && data.title && (
+          {!compact && phase === 'after' && data.title && (
             <p className="countdown__hint">השבת הבאה: {data.title}</p>
           )}
         </div>
         <dl className="countdown__times">
-          <div>
-            <dt>הדלקת נרות</dt>
-            <dd>{formatTime(data.candleLighting)}</dd>
-          </div>
-          <div>
-            <dt>צאת השבת</dt>
-            <dd>{formatTime(data.havdalah)}</dd>
-          </div>
+          {/* בטלפון: רק הזמן הרלוונטי עכשיו, כדי שהפס יישאר בשורה אחת */}
+          {(!compact || phase === 'before') && (
+            <div>
+              <dt>{compact ? 'הדלקה' : 'הדלקת נרות'}</dt>
+              <dd>{formatTime(data.candleLighting)}</dd>
+            </div>
+          )}
+          {(!compact || phase !== 'before') && (
+            <div>
+              <dt>{compact ? 'צאת שבת' : 'צאת השבת'}</dt>
+              <dd>{formatTime(data.havdalah)}</dd>
+            </div>
+          )}
         </dl>
       </div>
     </div>

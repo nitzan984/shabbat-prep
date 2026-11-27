@@ -1,31 +1,36 @@
 import type { MouseEvent } from 'react'
-import { jumpToSection, useActiveSection, type NavTarget } from '../hooks/useActiveSection'
 import { useChecklist } from '../hooks/useChecklist'
-import { shabbatTasks, useTasks } from '../hooks/useTasks'
-import { layoutActions, type WidgetId } from '../hooks/useLayout'
+import { useIsPhone } from '../hooks/useMedia'
 import { useNow } from '../hooks/useNow'
+import { navigate, useRoute, type Route } from '../hooks/useRoute'
+import { shabbatTasks, tasksOn, useTasks } from '../hooks/useTasks'
 import { remainingMs, useTimer } from '../hooks/useTimer'
-import { formatClock } from '../lib/time'
+import { formatClock, israelDay } from '../lib/time'
 import { Icon, type IconName } from './ui/Icon'
-import { revealWidget } from './widgets/reveal'
 
 interface NavItem {
-  target: NavTarget
-  widget: WidgetId | null
+  route: Route
   label: string
   icon: IconName
   tone: string
 }
 
-const ITEMS: NavItem[] = [
-  { target: 'shabbat-info', widget: null, label: 'שבת', icon: 'candle', tone: 'info' },
-  { target: 'widget-timer', widget: 'timer', label: 'טיימר', icon: 'timer', tone: 'timer' },
-  { target: 'widget-tasks', widget: 'tasks', label: 'מטלות', icon: 'list', tone: 'tasks' },
-  { target: 'widget-checklist', widget: 'checklist', label: 'לא לשכוח', icon: 'clipboard', tone: 'checklist' },
-  { target: 'widget-recipes', widget: 'recipes', label: 'מתכונים', icon: 'chef', tone: 'recipes' },
+/** בטלפון: חמישה מסכים בסרגל תחתון */
+const PHONE_ITEMS: NavItem[] = [
+  { route: 'shabbat', label: 'שבת', icon: 'candle', tone: 'info' },
+  { route: 'tasks', label: 'משימות', icon: 'list', tone: 'tasks' },
+  { route: 'week', label: 'השבוע', icon: 'calendar', tone: 'checklist' },
+  { route: 'recipes', label: 'מתכונים', icon: 'chef', tone: 'recipes' },
+  { route: 'timer', label: 'טיימר', icon: 'timer', tone: 'timer' },
 ]
 
-/** בזמן ריצה הטאב של הטיימר מציג את הזמן שנותר, כדי לראות אותו מכל מקום בדף. */
+/** במסך רחב: לוח השבת (עם כל הווידג'טים) והשבוע */
+const WIDE_ITEMS: NavItem[] = [
+  { route: 'shabbat', label: 'הכנות לשבת', icon: 'candle', tone: 'info' },
+  { route: 'week', label: 'השבוע', icon: 'calendar', tone: 'checklist' },
+]
+
+/** בזמן ריצה הטאב של הטיימר מציג את הזמן שנותר, כדי לראות אותו מכל מסך. */
 function useTimerBadge(): { text: string | null; spoken: string | null } {
   const timer = useTimer()
   const now = useNow(timer.status === 'running' ? 1000 : null)
@@ -37,39 +42,41 @@ function useTimerBadge(): { text: string | null; spoken: string | null } {
   return { text: null, spoken: null }
 }
 
-/** ניווט ראשי: בטלפון פס תחתון, באייפד ובמחשב פס עליון (CSS מחליט). */
-export function AppNav() {
-  const active = useActiveSection()
-  const tasksLeft = shabbatTasks(useTasks().tasks).filter((t) => !t.done).length
-  const checklistLeft = useChecklist().items.filter((t) => !t.done).length
+export function AppNav({ onMenu }: { onMenu: () => void }) {
+  const phone = useIsPhone()
+  const route = useRoute()
+  const { tasks } = useTasks()
+  const checklist = useChecklist().items
   const timerBadge = useTimerBadge()
+  const now = useNow(60_000)
+
+  const openShabbat =
+    shabbatTasks(tasks).filter((t) => !t.done).length + checklist.filter((i) => !i.done).length
+  const openToday = tasksOn(tasks, israelDay(now).iso).filter((t) => !t.done).length
+  const counts: Partial<Record<Route, number>> = { tasks: openShabbat, week: openToday }
+
+  const items = phone ? PHONE_ITEMS : WIDE_ITEMS
+  // במסך רחב כל מה שאינו "השבוע" הוא לוח השבת
+  const active: Route = phone ? route : route === 'week' ? 'week' : 'shabbat'
 
   const go = (event: MouseEvent<HTMLAnchorElement>, item: NavItem) => {
     event.preventDefault()
-    if (item.widget) {
-      layoutActions.show(item.widget)
-      revealWidget(item.widget)
-    } else {
-      const el = document.getElementById(item.target)
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      el?.focus({ preventScroll: true })
-    }
-    jumpToSection(item.target)
+    navigate(item.route)
   }
 
   return (
     <nav className="app-nav" aria-label="ניווט ראשי">
       <ul className="app-nav__list container">
-        {ITEMS.map((item) => {
-          const count = item.widget === 'tasks' ? tasksLeft : item.widget === 'checklist' ? checklistLeft : 0
-          const isTimer = item.widget === 'timer' && timerBadge.text !== null
-          const extra = isTimer ? timerBadge.spoken : count > 0 ? `${count} נותרו` : null
+        {items.map((item) => {
+          const count = phone ? (counts[item.route] ?? 0) : 0
+          const isTimer = item.route === 'timer' && timerBadge.text !== null
+          const extra = isTimer ? timerBadge.spoken : count > 0 ? `${count} פתוחות` : null
           return (
-            <li key={item.target}>
+            <li key={item.route}>
               <a
-                href={`#${item.target}`}
+                href={`#/${item.route}`}
                 className={`app-nav__item nav-tone--${item.tone}`}
-                aria-current={active === item.target ? 'location' : undefined}
+                aria-current={active === item.route ? 'page' : undefined}
                 onClick={(e) => go(e, item)}
               >
                 <span className="app-nav__icon">
@@ -80,7 +87,10 @@ export function AppNav() {
                     </span>
                   )}
                 </span>
-                <span className={isTimer ? 'app-nav__label app-nav__label--clock' : 'app-nav__label'} aria-hidden={isTimer || undefined}>
+                <span
+                  className={isTimer ? 'app-nav__label app-nav__label--clock' : 'app-nav__label'}
+                  aria-hidden={isTimer || undefined}
+                >
                   {isTimer ? timerBadge.text : item.label}
                 </span>
                 {isTimer && <span className="sr-only">{item.label}</span>}
@@ -89,6 +99,13 @@ export function AppNav() {
             </li>
           )
         })}
+        {!phone && (
+          <li className="app-nav__menu">
+            <button type="button" className="icon-btn" aria-label="הגדרות ושיתוף" onClick={onMenu}>
+              <Icon name="settings" size={24} />
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   )

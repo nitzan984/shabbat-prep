@@ -503,6 +503,161 @@ select.input {
   font-variant-numeric: tabular-nums;
 }
 
+/* ================= מעטפת לטלפון ================= */
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 8px 20px -14px rgba(30, 27, 75, 0.55);
+}
+
+.appbar__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(6px + env(safe-area-inset-top)) 12px 6px 6px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.appbar__logo {
+  display: grid;
+  place-items: center;
+  inline-size: 38px;
+  block-size: 38px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--yellow);
+}
+
+.appbar__titles {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.appbar__title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.appbar__subtitle {
+  overflow: hidden;
+  color: #e4e0ff;
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.countdown--compact .countdown__inner {
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding-block: 7px;
+}
+
+.countdown--compact .countdown__main {
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.countdown--compact .countdown__times div {
+  padding: 2px 10px;
+}
+
+.countdown--compact .countdown__times dt {
+  font-size: 0.75rem;
+}
+
+.countdown--compact .countdown__times dd {
+  font-size: 1rem;
+}
+
+.screen {
+  gap: 16px;
+  padding-block: 14px 24px;
+  animation: screen-in 0.18s ease-out;
+}
+
+.panel .widget__head {
+  padding: 12px 16px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  gap: 8px;
+}
+
+/* גיליון הגדרות (dialog): מלמטה בטלפון, במרכז במסך רחב */
+.sheet {
+  inline-size: min(520px, 100%);
+  max-block-size: 88vh;
+  margin: auto auto 0;
+  padding: 0 0 max(16px, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 28px 28px 0 0;
+  background: #fff;
+  color: var(--ink);
+  overflow-y: auto;
+}
+
+.sheet::backdrop {
+  background: rgba(30, 27, 75, 0.55);
+}
+
+.sheet[open] {
+  animation: sheet-in 0.2s ease-out;
+}
+
+.sheet__head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px 8px 20px;
+  background: #fff;
+}
+
+.sheet__title {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.sheet__section {
+  display: grid;
+  gap: 10px;
+  margin-inline: 16px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--bg);
+}
+
+.sheet__section + .sheet__section {
+  margin-block-start: 12px;
+}
+
+.sheet__subtitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.sheet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn--wide {
+  inline-size: 100%;
+  min-block-size: 52px;
+  font-size: 1.1rem;
+}
+
+.app-nav__menu {
+  margin-inline-start: auto;
+}
+
 /* ================= אזור ראשי ================= */
 .main {
   display: grid;
@@ -823,7 +978,7 @@ select.input {
   background: var(--tint);
 }
 
-.app-nav__item[aria-current='location'] {
+.app-nav__item[aria-current='page'] {
   background: var(--c);
   color: #fff;
 }
@@ -851,7 +1006,7 @@ select.input {
   text-align: center;
 }
 
-.app-nav__item[aria-current='location'] .app-nav__badge {
+.app-nav__item[aria-current='page'] .app-nav__badge {
   background: #fff;
   border-color: var(--c);
   color: var(--c-ink);
@@ -1312,12 +1467,9 @@ select.input {
   border: 2px solid transparent;
   border-radius: 999px;
   background-color: var(--p-tint);
-  background-image: linear-gradient(45deg, transparent 50%, var(--p-ink) 50%),
-    linear-gradient(135deg, var(--p-ink) 50%, transparent 50%);
-  background-position:
-    left 14px center,
-    left 9px center;
-  background-size: 5px 5px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23565280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: left 10px center;
+  background-size: 10px 7px;
   background-repeat: no-repeat;
   color: var(--p-ink);
   font-size: 0.95rem;
@@ -1748,6 +1900,19 @@ select.input {
 
   body {
     padding-block-end: var(--bottom-nav);
+    overscroll-behavior-y: none;
+  }
+
+  .container {
+    padding-inline: 12px;
+  }
+
+  .info-card {
+    padding: 20px 14px 14px;
+  }
+
+  .widget__body {
+    padding: 14px 12px;
   }
 
   .app-nav {
@@ -1792,13 +1957,13 @@ select.input {
     background: transparent;
   }
 
-  .app-nav__item[aria-current='location'] {
+  .app-nav__item[aria-current='page'] {
     background: transparent;
     color: var(--c-ink);
     font-weight: 700;
   }
 
-  .app-nav__item[aria-current='location'] .app-nav__icon {
+  .app-nav__item[aria-current='page'] .app-nav__icon {
     background: var(--c);
     color: #fff;
   }
@@ -1823,6 +1988,11 @@ select.input {
 @media (min-width: 740px) {
   :root {
     --sticky-offset: 124px;
+  }
+
+  .sheet {
+    margin: auto;
+    border-radius: 28px;
   }
 }
 
@@ -1907,6 +2077,20 @@ select.input {
   }
   to {
     background-position: -200% 0;
+  }
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(40px);
+    opacity: 0.6;
   }
 }
 

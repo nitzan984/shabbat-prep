@@ -1,4 +1,3 @@
-import { refreshActiveSection } from '../../hooks/useActiveSection'
 import { layoutActions, useLayout } from '../../hooks/useLayout'
 import { Icon } from '../ui/Icon'
 import { WIDGETS } from './registry'
@@ -25,8 +24,7 @@ export function WidgetToggles() {
                 aria-pressed={visible}
                 onClick={() => {
                   layoutActions.toggle(id)
-                  refreshActiveSection()
-                }}
+                              }}
               >
                 <Icon name={meta.icon} size={20} />
                 {meta.title}

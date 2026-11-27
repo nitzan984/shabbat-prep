@@ -1,5 +1,4 @@
 import { useState, type DragEvent } from 'react'
-import { refreshActiveSection } from '../../hooks/useActiveSection'
 import { layoutActions, useLayout, type WidgetId } from '../../hooks/useLayout'
 import { announce } from '../../hooks/useNotices'
 import { Icon } from '../ui/Icon'
@@ -60,14 +59,12 @@ export function WidgetGrid() {
     endDrag()
     if (!from || from === target) return
     layoutActions.moveTo(from, target)
-    refreshActiveSection()
     announce(`${WIDGETS[from].title} הועבר למקום של ${WIDGETS[target].title}`)
   }
 
   const move = (id: WidgetId, dir: -1 | 1) => {
     const position = visible.indexOf(id) + dir
     layoutActions.step(id, dir)
-    refreshActiveSection()
     announce(`${WIDGETS[id].title} במקום ${position + 1} מתוך ${visible.length}`)
     // React מזיז את ה־DOM ולכן הפוקוס עלול ללכת לאיבוד: מחזירים אותו לכפתור
     focusById(`move-${id}-${dir}`, `move-${id}-${-dir}`)
@@ -75,7 +72,6 @@ export function WidgetGrid() {
 
   const hide = (id: WidgetId) => {
     layoutActions.toggle(id)
-    refreshActiveSection()
     announce(`${WIDGETS[id].title} הוסתר. אפשר להחזיר אותו משורת הווידג'טים.`)
     focusById(`toggle-${id}`)
   }

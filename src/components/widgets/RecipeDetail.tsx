@@ -1,4 +1,6 @@
 import { layoutActions } from '../../hooks/useLayout'
+import { isPhone } from '../../hooks/useMedia'
+import { navigate } from '../../hooks/useRoute'
 import { showToast } from '../../hooks/useNotices'
 import { categoryLabel, recipeActions, type Recipe } from '../../hooks/useRecipes'
 import { taskActions } from '../../hooks/useTasks'
@@ -27,9 +29,14 @@ export function RecipeDetail({
   const setTimer = () => {
     if (!timerMinutes) return
     timerActions.setMinutes(timerMinutes, recipe.name)
-    layoutActions.show('timer')
     showToast(`הטיימר כוון ל־${formatMinutes(timerMinutes)} עבור ${recipe.name}`)
-    revealWidget('timer', 'timer-start')
+    if (isPhone()) {
+      navigate('timer')
+      requestAnimationFrame(() => document.getElementById('timer-start')?.focus())
+    } else {
+      layoutActions.show('timer')
+      revealWidget('timer', 'timer-start')
+    }
   }
 
   const addToTasks = () => {
