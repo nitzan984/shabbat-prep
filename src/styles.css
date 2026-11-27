@@ -395,12 +395,13 @@ select.input {
 
 /* ================= כותרת ================= */
 .site-header {
+  padding-block-start: env(safe-area-inset-top);
   background:
     radial-gradient(circle at 12% 0%, rgba(255, 201, 60, 0.22), transparent 40%),
     radial-gradient(circle at 90% 120%, rgba(190, 24, 93, 0.35), transparent 45%),
     var(--ink);
   color: #fff;
-  padding-block: 22px 20px;
+  padding-block: calc(22px + env(safe-area-inset-top)) 20px;
 }
 
 .site-header__inner {
@@ -2436,6 +2437,18 @@ select.input {
 
   .widget__head {
     padding-inline-start: 14px;
+  }
+}
+
+/* כשמותקן כאפליקציה: בלי בחירת טקסט בכפתורים ובניווט, כמו באפליקציה */
+@media (display-mode: standalone) {
+  .app-nav,
+  .btn,
+  .chip-btn,
+  .day-btn,
+  .person-chip {
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 

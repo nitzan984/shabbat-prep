@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="16" fill="#1E1B4B"/>
-  <path d="M32 8c5 6 7 10 7 13.5a7 7 0 0 1-14 0C25 18 27 14 32 8z" fill="#FFC93C"/>
-  <rect x="24" y="31" width="16" height="22" rx="3" fill="#F4F0FF"/>
-  <rect x="16" y="52" width="32" height="5" rx="2.5" fill="#FFC93C"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs><radialGradient id="g" cx="50%" cy="38%" r="45%"><stop offset="0" stop-color="#FFC93C" stop-opacity=".35"/><stop offset="1" stop-color="#FFC93C" stop-opacity="0"/></radialGradient></defs>
+<rect width="512" height="512" rx="112" fill="#1E1B4B"/>
+<circle cx="256" cy="210" r="190" fill="url(#g)"/>
+<path d="M196 138c22 26 30 44 30 58a30 30 0 0 1-60 0c0-14 8-32 30-58z" fill="#FFC93C"/>
+<path d="M316 138c22 26 30 44 30 58a30 30 0 0 1-60 0c0-14 8-32 30-58z" fill="#FFC93C"/>
+<path d="M196 168c9 11 12 18 12 24a12 12 0 0 1-24 0c0-6 3-13 12-24z" fill="#FFF3C4"/>
+<path d="M316 168c9 11 12 18 12 24a12 12 0 0 1-24 0c0-6 3-13 12-24z" fill="#FFF3C4"/>
+<rect x="168" y="246" width="56" height="150" rx="10" fill="#F4F0FF"/>
+<rect x="288" y="246" width="56" height="150" rx="10" fill="#F4F0FF"/>
+<rect x="140" y="392" width="232" height="30" rx="15" fill="#FFC93C"/>
 </svg>
