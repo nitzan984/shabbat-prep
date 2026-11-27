@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:live": "LIVE=1 vitest run src/services/live.test.ts",
     "preview": "vite preview",
-    "deploy": "pnpm dlx vercel@latest build --prod && pnpm dlx vercel@latest deploy --prebuilt --prod"
+    "deploy:manual": "pnpm dlx vercel@latest build --prod && pnpm dlx vercel@latest deploy --prebuilt --prod"
   },
   "dependencies": {
     "react": "^19.3.1",

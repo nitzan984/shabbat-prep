@@ -8,12 +8,16 @@
 
 ```bash
 pnpm install
-pnpm dev          # שרת פיתוח
-pnpm build        # בדיקת טיפוסים ובנייה
-pnpm test         # בדיקות יחידה
-pnpm test:live    # בדיקה מול Hebcal ו־Open-Meteo האמיתיים
-pnpm deploy       # בנייה מקומית ופריסה ל־Vercel (production)
+pnpm dev                # שרת פיתוח
+pnpm build              # בדיקת טיפוסים ובנייה
+pnpm test               # בדיקות יחידה
+pnpm test:live          # בדיקה מול Hebcal ו־Open-Meteo האמיתיים
+pnpm run deploy:manual  # פריסה ידנית מהמחשב (בדרך כלל לא צריך)
 ```
+
+## פריסה
+
+הריפו מחובר ל־Vercel: כל push ל־`main` נפרס אוטומטית ל־production, וכל ענף אחר מקבל כתובת preview משלו.
 
 ## מבנה
 
