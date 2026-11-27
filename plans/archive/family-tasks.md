@@ -1,6 +1,6 @@
 # Family sharing: assignees, weekday tasks, classes and events
 
-Branch: `feature/family-tasks` · Status: **approved 2026-11-27, in progress**
+Branch: `feature/family-tasks` · Status: **done 2026-11-27**
 
 ## Request (user's words, translated)
 1. Assign a task to שיר, מיכל or איתן.
@@ -106,10 +106,15 @@ Verified when: preview URL works on phone and iPad sizes with the family code; a
 | Phase | Status |
 | --- | --- |
 | 1 Backend and access | done: project `jooyitcfpwuazgwzrrnn` (eu-central-1), RLS proven with curl (right code 10 rows; no/wrong code empty; writes without code 401; cross-household update 401) |
-| 2 Shared Shabbat tasks | — |
-| 3 Shared checklist and recipes | — |
-| 4 Phone app shell | — |
-| 4b Week view | — |
-| 5 Classes and events | — |
-| 6b Android app (PWA) | — |
-| 6 Deploy | — |
+| 2 Shared Shabbat tasks | done: two tabs synced a task assigned to איתן and a checklist tick within 10 s; wrong code shows an error |
+| 3 Shared checklist and recipes | done: both read from Supabase (10 items, 5 recipes seeded) |
+| 4 Phone app shell | done: 5 tab screens at 375px, compact bar, settings sheet; wide board unchanged |
+| 4b Week view | done (built together with 5) |
+| 5 Classes and events | done: weekly class on Tuesdays, single-date cancel, family event, person filter; unit tests for expansion |
+| 6b Android app (PWA) | done: manifest, icons incl. maskable, service worker, install button |
+| 6 Deploy | done: env vars in all Vercel envs, keep-alive cron 200 on preview, merged to main |
+
+## Execution record
+- Shipped as planned, plus the mid-build phone shell and PWA (phases 4 and 6b).
+- Deviations: week view and events were built in one slice (one screen); the Vercel CLI required `--type config` to confirm the `VITE_` publishable key is public.
+- Verification: `pnpm build`, `pnpm test` (16 unit), `pnpm test:live` (7, incl. Supabase RLS on the test household), browser checks at 375px, 768px and 1180px, preview deployment checks with `vercel curl`.
