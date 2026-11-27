@@ -2202,6 +2202,45 @@ select.input {
   color: var(--yellow);
 }
 
+/* גרסה חדשה: פס קבוע מעל ההודעות */
+.update-banner {
+  position: fixed;
+  inset-inline: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 49;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-inline-size: 520px;
+  margin-inline: auto;
+  padding: 8px 8px 8px 8px;
+  padding-inline-start: 16px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 16px 32px -12px rgba(30, 27, 75, 0.6);
+  animation: pop-in 0.2s ease-out;
+}
+
+.update-banner > svg {
+  flex: none;
+  color: var(--yellow);
+}
+
+.update-banner__text {
+  flex: 1;
+  font-weight: 700;
+}
+
+body:has(.update-banner) .toasts {
+  bottom: calc(max(16px, env(safe-area-inset-bottom)) + 72px);
+}
+
+.version-id {
+  font-family: ui-monospace, monospace;
+  font-size: 0.95em;
+}
+
 .alarm {
   position: fixed;
   inset: 0;
@@ -2352,6 +2391,14 @@ select.input {
 
   .toasts {
     bottom: calc(var(--bottom-nav) + 12px);
+  }
+
+  .update-banner {
+    bottom: calc(var(--bottom-nav) + 12px);
+  }
+
+  body:has(.update-banner) .toasts {
+    bottom: calc(var(--bottom-nav) + 84px);
   }
 }
 

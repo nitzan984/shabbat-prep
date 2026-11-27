@@ -61,7 +61,9 @@ self.addEventListener('fetch', (event) => {
   }
 
   // הגופן ושאר הקבצים הסטטיים: מהמטמון מיד, ומתעדכנים ברקע
-  if (isFont(url) || (url.origin === self.location.origin && !url.pathname.startsWith('/api/'))) {
+  const sameOrigin = url.origin === self.location.origin
+  const live = url.pathname.startsWith('/api/') || url.pathname === '/version.json'
+  if (isFont(url) || (sameOrigin && !live)) {
     const cacheName = isFont(url) ? FONTS : SHELL
     event.respondWith(
       caches.open(cacheName).then((cache) =>
@@ -77,5 +79,5 @@ self.addEventListener('fetch', (event) => {
       ),
     )
   }
-  // כל השאר (API חיצוניים) עובר ישר לרשת
+  // כל השאר (API חיצוניים, version.json) עובר ישר לרשת
 })

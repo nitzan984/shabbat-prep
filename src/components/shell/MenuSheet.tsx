@@ -1,6 +1,7 @@
-import type { Ref } from 'react'
+import { useState, type Ref } from 'react'
 import { inviteLink, leaveFamily, useFamily } from '../../hooks/useFamily'
 import { showToast } from '../../hooks/useNotices'
+import { applyUpdate, checkForUpdate, currentBuild, formatBuildTime, useUpdateAvailable } from '../../lib/update'
 import { FamilyGate } from '../FamilyGate'
 import { Icon } from '../ui/Icon'
 import { InstallButton } from './InstallButton'
@@ -20,7 +21,7 @@ async function shareInvite(code: string) {
   }
 }
 
-/** גיליון הגדרות: חיבור למשפחה, שיתוף קישור הזמנה והתקנת האפליקציה. */
+/** גיליון הגדרות: חיבור למשפחה, שיתוף קישור הזמנה, התקנת האפליקציה והגרסה. */
 export function MenuSheet({ ref }: { ref: Ref<HTMLDialogElement> }) {
   const family = useFamily()
 
@@ -75,6 +76,45 @@ export function MenuSheet({ ref }: { ref: Ref<HTMLDialogElement> }) {
         </h3>
         <InstallButton />
       </section>
+
+      <VersionSection />
     </dialog>
+  )
+}
+
+/** הגרסה שרצה במכשיר, ובדיקת עדכון ידנית. */
+function VersionSection() {
+  const updateAvailable = useUpdateAvailable()
+  const [checking, setChecking] = useState(false)
+
+  const check = async () => {
+    setChecking(true)
+    const found = await checkForUpdate()
+    setChecking(false)
+    if (!found) showToast('זו הגרסה העדכנית')
+  }
+
+  return (
+    <section className="sheet__section" aria-labelledby="menu-version">
+      <h3 id="menu-version" className="sheet__subtitle">
+        <Icon name="refresh" size={22} />
+        גרסה
+      </h3>
+      <p>
+        גרסה <bdi className="version-id">{currentBuild.commit}</bdi> · עודכנה {formatBuildTime(currentBuild.builtAt)}
+      </p>
+      {updateAvailable ? (
+        <button type="button" className="btn btn--accent btn--wide" onClick={applyUpdate}>
+          <Icon name="refresh" size={22} />
+          יש גרסה חדשה: רענון
+        </button>
+      ) : (
+        <div className="sheet__actions">
+          <button type="button" className="btn btn--soft" disabled={checking} onClick={() => void check()}>
+            {checking ? 'בודקים…' : 'בדיקת עדכונים'}
+          </button>
+        </div>
+      )}
+    </section>
   )
 }

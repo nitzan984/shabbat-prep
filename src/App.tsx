@@ -4,7 +4,7 @@ import { CountdownBar } from './components/header/CountdownBar'
 import { InfoCards } from './components/header/InfoCards'
 import { SiteHeader } from './components/header/SiteHeader'
 import { SummaryChips } from './components/header/SummaryChips'
-import { Toasts, TimerAlert } from './components/Notices'
+import { Toasts, TimerAlert, UpdateBanner } from './components/Notices'
 import { MenuSheet } from './components/shell/MenuSheet'
 import { PhoneAppBar } from './components/shell/PhoneAppBar'
 import { PhoneScreen } from './components/shell/Screens'
@@ -75,6 +75,7 @@ export default function App() {
       </div>
       <MenuSheet ref={menuRef} />
       <TimerAlert />
+      <UpdateBanner />
       <Toasts />
     </>
   )

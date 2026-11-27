@@ -1,6 +1,27 @@
 import { useAnnouncement, useToasts } from '../hooks/useNotices'
+import { useState } from 'react'
 import { timerActions, useTimer } from '../hooks/useTimer'
+import { applyUpdate, useUpdateAvailable } from '../lib/update'
 import { Icon } from './ui/Icon'
+
+/** פס קבוע בתחתית כשיצאה גרסה חדשה של האפליקציה. */
+export function UpdateBanner() {
+  const available = useUpdateAvailable()
+  const [dismissed, setDismissed] = useState(false)
+  if (!available || dismissed) return null
+  return (
+    <div className="update-banner" role="status">
+      <Icon name="refresh" size={22} />
+      <p className="update-banner__text">יש גרסה חדשה</p>
+      <button type="button" className="btn btn--accent btn--small" onClick={applyUpdate}>
+        רענון
+      </button>
+      <button type="button" className="icon-btn icon-btn--on-color" aria-label="אחר כך" onClick={() => setDismissed(true)}>
+        <Icon name="close" size={20} />
+      </button>
+    </div>
+  )
+}
 
 /** הודעה בולטת כשהטיימר מסתיים. מוצגת גם אם ווידג'ט הטיימר מוסתר. */
 export function TimerAlert() {
