@@ -149,3 +149,75 @@ export const recipesSpec: TableSpec<Recipe, RecipeRow> = {
       in_menu: r.inMenu,
     }),
 }
+
+// ---------- חוגים ואירועים ----------
+
+export type EventKind = 'class' | 'event'
+
+export interface CalendarEvent extends Row {
+  title: string
+  /** null = כל המשפחה */
+  person: PersonId | null
+  kind: EventKind
+  /** לאירוע: התאריך. לחוג: המפגש הראשון, וממנו היום בשבוע */
+  date: IsoDate
+  /** "16:00" */
+  startTime: string | null
+  endTime: string | null
+  repeat: 'none' | 'weekly'
+  repeatUntil: IsoDate | null
+  /** מפגשים שבוטלו */
+  skipDates: IsoDate[]
+  notes: string | null
+}
+
+interface EventRow extends Row {
+  title: string
+  person: string | null
+  kind: EventKind
+  date: string
+  start_time: string | null
+  end_time: string | null
+  repeat: 'none' | 'weekly'
+  repeat_until: string | null
+  skip_dates: string[] | null
+  notes: string | null
+}
+
+/** "16:00:00" → "16:00" */
+const hhmm = (t: string | null) => (t ? t.slice(0, 5) : null)
+
+export const eventsSpec: TableSpec<CalendarEvent, EventRow> = {
+  table: 'events',
+  query: () => {
+    const from = addDays(israelDay(Date.now()).iso, -TASK_HISTORY_DAYS)
+    return `select=id,title,person,kind,date,start_time,end_time,repeat,repeat_until,skip_dates,notes&or=(date.gte.${from},repeat.eq.weekly)&order=date.asc`
+  },
+  fromRow: (r) => ({
+    id: r.id,
+    title: r.title,
+    person: person(r.person),
+    kind: r.kind,
+    date: r.date,
+    startTime: hhmm(r.start_time),
+    endTime: hhmm(r.end_time),
+    repeat: r.repeat,
+    repeatUntil: r.repeat_until,
+    skipDates: r.skip_dates ?? [],
+    notes: r.notes,
+  }),
+  toRow: (e) =>
+    defined({
+      id: e.id,
+      title: e.title,
+      person: e.person,
+      kind: e.kind,
+      date: e.date,
+      start_time: e.startTime,
+      end_time: e.endTime,
+      repeat: e.repeat,
+      repeat_until: e.repeatUntil,
+      skip_dates: e.skipDates,
+      notes: e.notes,
+    }),
+}

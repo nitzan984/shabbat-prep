@@ -117,3 +117,32 @@ export function formatMinutes(minutes: number): string {
   if (m === 30) return `${hours} וחצי`
   return `${hours} ו־${m} דק׳`
 }
+
+/** 0 = ראשון ... 6 = שבת, לתאריך אזרחי */
+export function weekdayOf(iso: IsoDate): number {
+  const { year, month, day } = isoParts(iso)
+  return new Date(Date.UTC(year, month - 1, day)).getUTCDay()
+}
+
+/** יום ראשון של השבוע שבו התאריך נמצא */
+export const weekStartOf = (iso: IsoDate): IsoDate => addDays(iso, -weekdayOf(iso))
+
+/** מספר הימים מ־a עד b */
+export function daysBetween(a: IsoDate, b: IsoDate): number {
+  const pa = isoParts(a)
+  const pb = isoParts(b)
+  return Math.round((Date.UTC(pb.year, pb.month - 1, pb.day) - Date.UTC(pa.year, pa.month - 1, pa.day)) / 86_400_000)
+}
+
+const dayMonthFormatter = new Intl.DateTimeFormat('he-IL', { timeZone: 'UTC', day: 'numeric', month: 'long' })
+
+/** "22 בנובמבר" */
+export const formatDayMonth = (iso: IsoDate) => dayMonthFormatter.format(utcNoon(iso))
+
+/** "22.11" */
+export const formatShortDate = (iso: IsoDate) => {
+  const { month, day } = isoParts(iso)
+  return `${day}.${month}`
+}
+
+export const HEBREW_DAY_LETTERS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳']
