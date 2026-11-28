@@ -58,6 +58,47 @@ export function cancelAlarm() {
   scheduled = []
 }
 
+/** בלחיצה הראשונה על טיימר: מבקשים רשות להתראות (פעם אחת). */
+export function requestNotifyPermission() {
+  try {
+    if ('Notification' in window && Notification.permission === 'default') void Notification.requestPermission()
+  } catch {
+    // דפדפן בלי התראות
+  }
+}
+
+const NOTIFY_TAG = 'timer-done'
+
+/** התראה על מסך הנעילה כשהטיימר נגמר והאפליקציה לא מול העיניים. */
+export async function notifyDone(label: string | null) {
+  try {
+    if (document.visibilityState === 'visible' || !('Notification' in window) || Notification.permission !== 'granted') return
+    const registration = await navigator.serviceWorker?.getRegistration()
+    const options: NotificationOptions & { vibrate?: number[]; renotify?: boolean } = {
+      body: label ? `הטיימר של ${label} הסתיים.` : 'הטיימר הסתיים.',
+      tag: NOTIFY_TAG,
+      renotify: true,
+      requireInteraction: true,
+      icon: '/icons/icon-192.png',
+      vibrate: [400, 200, 400, 200, 800],
+    }
+    if (registration) await registration.showNotification('הזמן נגמר! ⏰', options)
+    else new Notification('הזמן נגמר! ⏰', options)
+  } catch {
+    // בלי התראה: הצליל והרטט עדיין פועלים
+  }
+}
+
+export async function clearDoneNotification() {
+  try {
+    const registration = await navigator.serviceWorker?.getRegistration()
+    const list = (await registration?.getNotifications({ tag: NOTIFY_TAG })) ?? []
+    list.forEach((n) => n.close())
+  } catch {
+    // אין מה לסגור
+  }
+}
+
 export function vibrate() {
   try {
     navigator.vibrate?.([400, 200, 400, 200, 800])

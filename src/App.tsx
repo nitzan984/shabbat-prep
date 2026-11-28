@@ -35,7 +35,7 @@ export default function App() {
         {phone ? (
           <>
             <PhoneAppBar week={week} onMenu={openMenu} />
-            <main className="container main screen" key={route}>
+            <main className={`container main screen screen--${route}`} key={route}>
               <PhoneScreen route={route} week={week} weather={weather} />
             </main>
             <AppNav onMenu={openMenu} />

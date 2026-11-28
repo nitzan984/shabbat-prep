@@ -30,95 +30,99 @@ export function TimerWidget() {
 
   return (
     <div className="timer">
-      <div className="timer__ring">
-        <svg viewBox="0 0 240 240" aria-hidden="true">
-          <circle className="timer__track" cx="120" cy="120" r={RADIUS} />
-          <circle
-            className="timer__progress"
-            cx="120"
-            cy="120"
-            r={RADIUS}
-            strokeDasharray={CIRCUMFERENCE}
-            strokeDashoffset={CIRCUMFERENCE * (1 - progress)}
-          />
-        </svg>
-        <div className="timer__center">
-          {timer.label && <span className="timer__label">{timer.label}</span>}
-          <span className="timer__time" role="timer" aria-label={`זמן שנותר: ${formatClock(left)}`}>
-            {formatClock(left)}
-          </span>
-          <span className="timer__status" aria-live="polite">
-            {STATUS_TEXT[timer.status]}
-          </span>
+      <div className="timer__ring-box">
+        <div className="timer__ring">
+          <svg viewBox="0 0 240 240" aria-hidden="true">
+            <circle className="timer__track" cx="120" cy="120" r={RADIUS} />
+            <circle
+              className="timer__progress"
+              cx="120"
+              cy="120"
+              r={RADIUS}
+              strokeDasharray={CIRCUMFERENCE}
+              strokeDashoffset={CIRCUMFERENCE * (1 - progress)}
+            />
+          </svg>
+          <div className="timer__center">
+            {timer.label && <span className="timer__label">{timer.label}</span>}
+            <span className="timer__time" role="timer" aria-label={`זמן שנותר: ${formatClock(left)}`}>
+              {formatClock(left)}
+            </span>
+            <span className="timer__status" aria-live="polite">
+              {STATUS_TEXT[timer.status]}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="timer__main">
-        <button
-          type="button"
-          id="timer-start"
-          className={`btn btn--xl ${running ? 'btn--pause' : 'btn--start'}`}
-          onClick={running ? timerActions.pause : timerActions.start}
-          disabled={!running && timer.status !== 'paused' && timer.durationMs === 0}
-        >
-          <Icon name={running ? 'pause' : 'play'} size={30} />
-          {running ? 'השהיה' : timer.status === 'paused' ? 'המשך' : 'התחלה'}
-        </button>
-        <button type="button" className="btn btn--xl btn--reset" onClick={timerActions.reset}>
-          <Icon name="reset" size={30} />
-          איפוס
-        </button>
-      </div>
-
-      <div className="timer__adjust" role="group" aria-label="שינוי הזמן">
-        {ADJUSTMENTS.map((delta) => (
+      <div className="timer__controls">
+        <div className="timer__main">
           <button
-            key={delta}
             type="button"
-            className="btn btn--soft"
-            aria-label={delta > 0 ? `הוספת ${Math.abs(delta)} דקות` : `הורדת ${Math.abs(delta)} דקות`}
-            disabled={!canAdjust(timer, now, delta)}
-            onClick={() => timerActions.adjust(delta)}
+            id="timer-start"
+            className={`btn btn--xl ${running ? 'btn--pause' : 'btn--start'}`}
+            onClick={running ? timerActions.pause : timerActions.start}
+            disabled={!running && timer.status !== 'paused' && timer.durationMs === 0}
           >
-            <span dir="ltr">{delta > 0 ? `+${delta}` : `−${Math.abs(delta)}`}</span>
+            <Icon name={running ? 'pause' : 'play'} size={30} />
+            {running ? 'השהיה' : timer.status === 'paused' ? 'המשך' : 'התחלה'}
           </button>
-        ))}
-      </div>
-
-      <div className="timer__presets" role="group" aria-label="זמנים מהירים: מכוונים ומתחילים">
-        {PRESETS.map((minutes) => (
-          <button
-            key={minutes}
-            type="button"
-            className="chip-btn"
-            onClick={() => timerActions.startMinutes(minutes)}
-          >
-            {formatMinutes(minutes)}
-          </button>
-        ))}
-      </div>
-
-      <form className="inline-form" onSubmit={submitCustom}>
-        <label htmlFor="timer-custom" className="inline-form__label">
-          זמן חופשי (דקות)
-        </label>
-        <div className="inline-form__row">
-          <input
-            id="timer-custom"
-            name="minutes"
-            type="number"
-            inputMode="numeric"
-            min={1}
-            max={600}
-            placeholder="למשל 25"
-            className="input"
-          />
-          <button type="submit" className="btn btn--primary">
-            <Icon name="play" size={20} />
-            הפעלה
+          <button type="button" className="btn btn--xl btn--reset" onClick={timerActions.reset}>
+            <Icon name="reset" size={30} />
+            איפוס
           </button>
         </div>
-      </form>
+
+        <div className="timer__adjust" role="group" aria-label="שינוי הזמן">
+          {ADJUSTMENTS.map((delta) => (
+            <button
+              key={delta}
+              type="button"
+              className="btn btn--soft"
+              aria-label={delta > 0 ? `הוספת ${Math.abs(delta)} דקות` : `הורדת ${Math.abs(delta)} דקות`}
+              disabled={!canAdjust(timer, now, delta)}
+              onClick={() => timerActions.adjust(delta)}
+            >
+              <span dir="ltr">{delta > 0 ? `+${delta}` : `−${Math.abs(delta)}`}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="timer__presets" role="group" aria-label="זמנים מהירים: מכוונים ומתחילים">
+          {PRESETS.map((minutes) => (
+            <button
+              key={minutes}
+              type="button"
+              className="chip-btn"
+              onClick={() => timerActions.startMinutes(minutes)}
+            >
+              {formatMinutes(minutes)}
+            </button>
+          ))}
+        </div>
+
+        <form className="inline-form" onSubmit={submitCustom}>
+          <label htmlFor="timer-custom" className="inline-form__label">
+            זמן חופשי (דקות)
+          </label>
+          <div className="inline-form__row">
+            <input
+              id="timer-custom"
+              name="minutes"
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={600}
+              placeholder="דקות, למשל 25"
+              className="input"
+            />
+            <button type="submit" className="btn btn--primary">
+              <Icon name="play" size={20} />
+              הפעלה
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

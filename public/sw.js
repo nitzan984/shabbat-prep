@@ -23,6 +23,17 @@ self.addEventListener('activate', (event) => {
   )
 })
 
+// לחיצה על התראת הטיימר: חוזרים לאפליקציה הפתוחה, או פותחים אותה על מסך הטיימר
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windows) => {
+      const open = windows.find((w) => 'focus' in w)
+      return open ? open.focus() : self.clients.openWindow('/#/timer')
+    }),
+  )
+})
+
 const isFont = (url) => url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com'
 
 self.addEventListener('fetch', (event) => {

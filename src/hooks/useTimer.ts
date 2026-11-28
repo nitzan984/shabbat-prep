@@ -1,5 +1,15 @@
-import { cancelAlarm, scheduleAlarm, unlockAudio, vibrate } from '../lib/alarm'
+import {
+  cancelAlarm,
+  clearDoneNotification,
+  notifyDone,
+  requestNotifyPermission,
+  scheduleAlarm,
+  unlockAudio,
+  vibrate,
+} from '../lib/alarm'
+import { primeKeepAlive, startKeepAlive, stopKeepAlive } from '../lib/keepAlive'
 import { createPersistentStore, useStore } from '../lib/store'
+import { formatClock } from '../lib/time'
 
 /**
  * טיימר מבוסס endAt: בזמן ריצה שומרים רק את חותמת הזמן של הסיום,
@@ -84,11 +94,28 @@ function finish() {
   timerStore.set({ status: 'done', durationMs: s.durationMs, label: s.label, finishedAt: s.endAt })
   if (!alarmArmed) scheduleAlarm(Date.now())
   vibrate()
+  void notifyDone(s.label)
+}
+
+/** כל עוד הטיימר רץ או מצלצל, האפליקציה נשארת ערה (מסך דולק, נגן מדיה ברקע). */
+function syncKeepAlive(s: TimerState) {
+  if (s.status === 'running' || s.status === 'done') {
+    const what = s.label ? `טיימר: ${s.label}` : 'טיימר'
+    startKeepAlive({
+      title: s.status === 'done' ? 'הזמן נגמר!' : `${what} · ${formatClock(s.durationMs)}`,
+      onPause: () => (timerStore.get().status === 'done' ? timerActions.dismiss() : timerActions.pause()),
+      onPlay: () => timerActions.start(),
+    })
+  } else {
+    stopKeepAlive()
+  }
+  if (s.status !== 'done') void clearDoneNotification()
 }
 
 /** מיישר את ה־setTimeout והצליל למצב ב־store (כולל שינוי מטאב אחר). */
 function sync() {
   const s = timerStore.get()
+  if (typeof window !== 'undefined') syncKeepAlive(s)
   if (s.status === 'running') {
     if (scheduledEndAt === s.endAt) return
     clearTimeout(timeoutId)
@@ -122,7 +149,10 @@ if (typeof document !== 'undefined') {
 const clamp = (ms: number) => Math.min(MAX_MS, Math.max(0, ms))
 
 function run(durationMs: number, label: string | null, remaining = durationMs) {
+  // שלושתם חייבים לקרות בתוך הלחיצה
   unlockAudio()
+  primeKeepAlive()
+  requestNotifyPermission()
   timerStore.set({ status: 'running', durationMs, label, endAt: Date.now() + remaining })
 }
 

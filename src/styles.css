@@ -1344,6 +1344,12 @@ select.input {
   font-weight: 600;
 }
 
+.timer__controls {
+  display: grid;
+  gap: 16px;
+  inline-size: 100%;
+}
+
 .timer__main {
   display: flex;
   gap: 12px;
@@ -2391,6 +2397,132 @@ body:has(.update-banner) .toasts {
 
   .toasts {
     bottom: calc(var(--bottom-nav) + 12px);
+  }
+
+  /* מסך הטיימר בטלפון: כל הטיימר נכנס במסך אחד, בלי גלילה. העיגול מתכווץ לפי הגובה שנשאר. */
+  .screen--timer {
+    display: flex;
+    flex-direction: column;
+    block-size: calc(100dvh - var(--appbar-h, 98px) - var(--bottom-nav));
+    padding-block: 10px;
+  }
+
+  .screen--timer .panel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+  }
+
+  .screen--timer .panel__title {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .screen--timer .widget__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+    padding: 12px;
+  }
+
+  .screen--timer .timer {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    min-block-size: 0;
+  }
+
+  .screen--timer .timer__ring-box {
+    flex: 1;
+    min-block-size: 120px;
+    container-type: size;
+    display: grid;
+    place-items: center;
+  }
+
+  .screen--timer .timer__ring {
+    --ring: min(100cqw, 100cqh, 380px);
+    inline-size: var(--ring);
+  }
+
+  .screen--timer .timer__center {
+    padding: 14%;
+  }
+
+  /* הספרות לפי גודל העיגול, כדי שלא יחרגו ממנו בטלפון קטן */
+  .screen--timer .timer__time {
+    font-size: calc(var(--ring) * 0.2);
+  }
+
+  .screen--timer .timer__status,
+  .screen--timer .timer__label {
+    font-size: max(0.8rem, calc(var(--ring) * 0.065));
+  }
+
+  .screen--timer .btn--xl {
+    min-block-size: 58px;
+    font-size: 1.25rem;
+  }
+
+  .screen--timer .timer__adjust .btn {
+    min-block-size: 44px;
+  }
+
+  /* זמנים מהירים בשורה אחת שגוללים לצדדים */
+  .screen--timer .timer__presets {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    margin-inline: -12px;
+    padding-inline: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to left, #000 85%, transparent);
+  }
+
+  .screen--timer .timer__presets .chip-btn {
+    flex: none;
+  }
+
+  .screen--timer .timer__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* טלפון לרוחב: העיגול בצד אחד והכפתורים בצד השני (נגללים אם צריך) */
+  @media (orientation: landscape) {
+    .screen--timer .timer {
+      flex-direction: row;
+      gap: 16px;
+    }
+
+    .screen--timer .timer__ring-box {
+      flex: 0.8;
+      min-block-size: 0;
+    }
+
+    .screen--timer .timer__controls {
+      flex: 1.2;
+      min-inline-size: 0;
+      overflow-y: auto;
+    }
+  }
+
+  .screen--timer .inline-form__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .update-banner {
